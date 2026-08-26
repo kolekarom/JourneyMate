@@ -3,124 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Travel Agency</title>
+    <title>JourneyMate - Contact Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f8ff; /* Light blue background */
-            color: #333;
-        }
-        header {
-            background-color: #2dd1f5; /* Dark blue */
-            color: #fff;
-            padding: 10px 0;
+        .contact-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 50px 20px 35px;
             text-align: center;
         }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+        .contact-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, #00c6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        h1 {
-            color: #003366; /* Dark blue */
+
+        .contact-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
         }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .contact-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
         }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #666300; /* Dark blue */
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #334155;
         }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        input:focus, textarea:focus {
-            border-color: #ffcc00; /* Yellow border on focus */
+
+        .form-group input, .form-group textarea {
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
-        button {
-            background-color: #3aa4eb; /* Dark blue */
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
         }
-        button:hover {
-            background-color: #002244; /* Darker blue on hover */
-        }
-        .contact-info {
-            margin-top: 20px;
-            font-size: 16px;
-        }
-        .contact-info h2 {
-            color: #003366; /* Dark blue */
-        }
-        .contact-info p {
-            margin: 5px 0;
-        }
-        footer {
-            background-color: #a5caee; /* Dark blue */
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
+
+        .btn-send {
             width: 100%;
-            bottom: 0;
+            padding: 14px;
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .info-item ion-icon {
+            font-size: 1.8rem;
+            color: #00c6ff;
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .info-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .info-item p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Connect with Us for Your Travel Needs"</h1>
-    </header>
-    <div class="container">
-        <h1>Contact Us</h1>
-        <form id="contact-form">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-            </div>
-            <button type="submit">Send Message</button>
-        </form>
-        <div class="contact-info">
-            <h2>Our Contact Information</h2>
-            <p><strong>Address:</strong> 123 Travel Lane, Wanderlust City, TL 45678</p>
-            <p><strong>Phone:</strong> +1 (234) 567-8901</p>
-            <p><strong>Email:</strong> contact@travelagency.com</p>
-        </div>
-    </div>
-    
 
+    <!-- Header Navigation -->
+    <header class="header" data-header>
+        <div class="container">
+            <a href="index.html">
+                <h1 class="logo">JourneyMate</h1>
+            </a>
+
+            <nav class="navbar">
+                <ul class="navbar-list">
+                    <li><a href="index.html" class="navbar-link">Home</a></li>
+                    <li><a href="explore.html" class="navbar-link">Explore</a></li>
+                    <li><a href="forecast.html" class="navbar-link">Weather</a></li>
+                    <li><a href="plan.html" class="navbar-link">Plan Trip</a></li>
+                    <li><a href="helpus.html" class="navbar-link">SafetyCheck</a></li>
+                    <li><a href="contactus.html" class="navbar-link active">Contact Us</a></li>
+                </ul>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="Login.html" class="btn btn-secondary">Login</a>
+                    <a href="Signup.html" class="btn btn-secondary">Signup</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contact Hero -->
+    <section class="contact-hero">
+        <h2 class="contact-title">Connect With Our Travel Support</h2>
+        <p style="color: #94a3b8;">Have questions about travel destinations or custom itineraries? We're here 24/7.</p>
+    </section>
+
+    <!-- Content Grid -->
+    <main class="contact-container">
+        <div class="contact-card">
+            <h3 style="font-size: 1.5rem; color: #0f172a; margin-bottom: 20px;">Send Us a Message</h3>
+            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Your Full Name</label>
+                    <input type="text" id="name" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" rows="4" placeholder="Tell us about your trip plans or inquiry..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-send">
+                    <ion-icon name="paper-plane-outline"></ion-icon>
+                    <span>Send Message</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="info-card">
+            <h3 style="font-size: 1.5rem; color: #ffffff;">Contact Information</h3>
+
+            <div class="info-item">
+                <ion-icon name="location-outline"></ion-icon>
+                <div>
+                    <h4>Headquarters</h4>
+                    <p>123 Journey Way, Wanderlust City, Maharashtra, India</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <ion-icon name="call-outline"></ion-icon>
+                <div>
+                    <h4>Phone Support</h4>
+                    <p>+91 (020) 2468-1357<br>Mon - Sat: 9:00 AM - 8:00 PM IST</p>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <ion-icon name="mail-outline"></ion-icon>
+                <div>
+                    <h4>Email Us</h4>
+                    <p>support@journeymate.com<br>info@journeymate.com</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./images/footer-bg.png')">
+        <div class="container" style="text-align: center; padding: 30px 0; color: #94a3b8;">
+            <p>&copy; 2026 JourneyMate. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
     <script>
-        // Example JavaScript to handle form submission
-        document.getElementById('contact-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-            
-            // Here you would typically handle form data and submission
-            alert('Thank you for contacting us! We will get back to you soon.');
-        });
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            window.showToast(`Thank you, ${name}! Your message has been sent successfully.`, 'success');
+            document.getElementById('contact-form').reset();
+        }
     </script>
 </body>
 </html>

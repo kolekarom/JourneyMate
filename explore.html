@@ -3,205 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>City Explorer</title>
+    <title>JourneyMate - Explore Destinations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <style>
-        /* Reset some default styles */
-        body, h1, h2, h3, p, ul, li {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .explore-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 20px;
+        .explore-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #00c6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        form {
-            margin-bottom: 20px;
+        .explore-subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 30px;
         }
 
-        #citySearchForm {
+        .search-box-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 8px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         }
 
-        #cityInput {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-            width: 200px;
-            margin-right: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
+        .search-box-wrapper input {
+            flex: 1;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
-            background-color: #007bff;
+            background: transparent;
             color: white;
             font-size: 1rem;
+            outline: none;
+        }
+
+        .search-box-wrapper input::placeholder {
+            color: #cbd5e1;
+        }
+
+        .search-box-wrapper button {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .search-box-wrapper button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 198, 255, 0.4);
         }
 
-        #cityInfo {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .filter-chips {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 25px 0 10px;
+        }
+
+        .chip {
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .chip:hover, .chip.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .explore-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .city-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .city-card {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .city-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.14);
+        }
+
+        .city-card-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
             padding: 20px;
-            margin: 0 auto;
-            max-width: 800px;
+            position: relative;
         }
 
-        #cityInfo h2 {
-            font-size: 2em;
-            margin-bottom: 10px;
-            color: #333;
+        .city-card-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+            color: #00c6ff;
         }
 
-        #cityInfo p {
-            font-size: 1em;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .city-card-header p {
+            font-size: 0.9rem;
+            color: #94a3b8;
         }
 
-        #cityInfo h3 {
-            font-size: 1.5em;
-            margin-top: 20px;
-            margin-bottom: 10px;
+        .city-card-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .city-card-body h4 {
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+
+        .attraction-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .attraction-tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .card-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+            color: #64748b;
+        }
+
+        .card-stat ion-icon {
+            font-size: 1.1rem;
             color: #007bff;
         }
 
-        #cityInfo ul {
-            list-style-type: none;
-            padding: 0;
+        .city-card-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        #cityInfo ul li {
-            background: #eee;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
+        .btn-card-action {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background 0.2s;
         }
 
-        #cityInfo p strong {
-            font-weight: bold;
+        .btn-card-action:hover {
+            background: #0056b3;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+            grid-column: 1 / -1;
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
-    <form id="citySearchForm">
-        <input type="text" id="cityInput" placeholder="Enter City Name">
-        <button type="submit">Explore</button>
-    </form>
-    
-    <div id="cityInfo"></div>
-    <script>
-        const citiesData = {
-            "New York": {
-                name: "New York",
-                description: "The city that never sleeps.",
-                attractions: ["Statue of Liberty", "Central Park", "Empire State Building"],
-                weather: "Mild winters, hot summers",
-                safety: "Moderately safe with low crime rates in tourist areas"
-            },
-            "Paris": {
-                name: "Paris",
-                description: "The city of light and love.",
-                attractions: ["Eiffel Tower", "Louvre Museum", "Notre-Dame Cathedral"],
-                weather: "Cool winters, warm summers",
-                safety: "Safe, but beware of pickpockets in crowded areas"
-            },
-            "Pandharpur": {
-                name: "Pandharpur",
-                description: "A prominent pilgrimage town in Maharashtra, famous for the Vithoba temple.",
-                attractions: ["Vithoba Temple", "Pandharpur Fort", "Chandreshwar Temple"],
-                weather: "Hot and dry with monsoon rains",
-                safety: "Generally safe, with high safety around religious sites"
-            },
-            "Solapur": {
-                name: "Solapur",
-                description: "Known for its historical sites and textile industry.",
-                attractions: ["Siddheshwar Temple", "Solapur Fort", "Haji Malang", "Bhui-Bhondeshwar Temple"],
-                weather: "Hot and dry with moderate monsoon rains",
-                safety: "Moderate, with standard precautions needed in crowded areas"
-            },
-            "Kolhapur": {
-                name: "Kolhapur",
-                description: "Famous for its rich heritage, the Mahalaxmi Temple, and Kolhapuri chappals.",
-                attractions: ["Mahalaxmi Temple", "Panhala Fort", "Kolhapur Chappal", "Rankala Lake"],
-                weather: "Tropical climate with heavy monsoons",
-                safety: "High, generally safe with routine precautions"
-            },
-            "Mumbai": {
-                name: "Mumbai",
-                description: "The financial capital of India, bustling with energy and diverse culture.",
-                attractions: ["Gateway of India", "Marine Drive", "Elephanta Caves", "Chhatrapati Shivaji Terminus"],
-                weather: "Hot and humid with heavy monsoon rains",
-                safety: "Moderate, with higher safety in tourist areas"
-            },
-            "Delhi": {
-                name: "Delhi",
-                description: "The vibrant capital city known for its rich history and bustling streets.",
-                attractions: ["Red Fort", "Qutub Minar", "India Gate", "Humayun's Tomb"],
-                weather: "Extreme temperature variations with dry winters and hot summers",
-                safety: "Moderate, with vigilance needed in crowded areas"
-            },
-            "Bengaluru": {
-                name: "Bengaluru",
-                description: "The Silicon Valley of India, renowned for its pleasant climate and tech industry.",
-                attractions: ["Lalbagh Botanical Garden", "Bangalore Palace", "Cubbon Park", "Vidhana Soudha"],
-                weather: "Pleasant and moderate throughout the year",
-                safety: "High, generally safe for visitors"
-            },
-            "Kolkata": {
-                name: "Kolkata",
-                description: "Known for its colonial architecture, cultural heritage, and vibrant festivals.",
-                attractions: ["Victoria Memorial", "Howrah Bridge", "Indian Museum", "Kalighat Temple"],
-                weather: "Tropical climate with heavy monsoons",
-                safety: "Moderate, with higher safety in major tourist areas"
-            },
-            "Chennai": {
-                name: "Chennai",
-                description: "A major cultural and economic hub with a rich history and beautiful coastal scenery.",
-                attractions: ["Marina Beach", "Kapaleeshwarar Temple", "Breezy Beach", "Fort St. George"],
-                weather: "Hot and humid with a tropical climate",
-                safety: "High, generally safe with routine precautions"
-            }
-        };
 
-        document.getElementById('citySearchForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const cityName = document.getElementById('cityInput').value;
-            displayCityInfo(cityName);
-        });
-        
-        function displayCityInfo(cityName) {
-            const cityInfoDiv = document.getElementById('cityInfo');
-            cityInfoDiv.innerHTML = ''; // Clear previous info
-        
-            if (citiesData[cityName]) {
-                const city = citiesData[cityName];
-                cityInfoDiv.innerHTML = `
-                    <h2>${city.name}</h2>
-                    <p>${city.description}</p>
-                    <h3>Attractions</h3>
-                    <ul>${city.attractions.map(attraction => `<li>${attraction}</li>`).join('')}</ul>
-                    <p><strong>Weather:</strong> ${city.weather}</p>
-                    <p><strong>Safety:</strong> ${city.safety}</p>
-                `;
-            } else {
-                cityInfoDiv.innerHTML = `<p>City not found. Please try another city.</p>`;
+    <!-- Header Navigation -->
+    <header class="header" data-header>
+        <div class="container">
+            <a href="index.html">
+                <h1 class="logo">JourneyMate</h1>
+            </a>
+
+            <nav class="navbar">
+                <ul class="navbar-list">
+                    <li><a href="index.html" class="navbar-link">Home</a></li>
+                    <li><a href="explore.html" class="navbar-link active">Explore</a></li>
+                    <li><a href="forecast.html" class="navbar-link">Weather</a></li>
+                    <li><a href="plan.html" class="navbar-link">Plan Trip</a></li>
+                    <li><a href="helpus.html" class="navbar-link">SafetyCheck</a></li>
+                    <li><a href="contactus.html" class="navbar-link">Contact Us</a></li>
+                </ul>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="Login.html" class="btn btn-secondary">Login</a>
+                    <a href="Signup.html" class="btn btn-secondary">Signup</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Explore Hero -->
+    <section class="explore-hero">
+        <h2 class="explore-title">Explore World & Indian Cities</h2>
+        <p class="explore-subtitle">Discover top attractions, weather conditions, and travel safety insights across major destinations.</p>
+
+        <div class="search-box-wrapper">
+            <input type="text" id="cityInput" placeholder="Search city name (e.g. Mumbai, Paris, Delhi)..." onkeyup="filterCities()">
+            <button type="button" onclick="filterCities()">Search</button>
+        </div>
+
+        <div class="filter-chips">
+            <button class="chip active" onclick="filterCategory('All', this)">All Cities</button>
+            <button class="chip" onclick="filterCategory('Metros', this)">Metros</button>
+            <button class="chip" onclick="filterCategory('Pilgrimage', this)">Pilgrimage</button>
+            <button class="chip" onclick="filterCategory('Heritage', this)">Heritage & Culture</button>
+        </div>
+    </section>
+
+    <!-- Main Grid Content -->
+    <main class="explore-content">
+        <div id="cityGrid" class="city-grid">
+            <!-- Rendered by JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./images/footer-bg.png')">
+        <div class="container" style="text-align: center; padding: 30px 0; color: #94a3b8;">
+            <p>&copy; 2026 JourneyMate. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        const citiesData = [
+            {
+                name: "Mumbai",
+                category: "Metros",
+                description: "The financial capital of India, bustling with energy, heritage architecture, and iconic coastal drives.",
+                attractions: ["Marine Drive", "Gateway of India", "Elephanta Caves", "Colaba Causeway"],
+                weather: "Tropical monsoon, 27°C - 34°C",
+                safety: "High tourist safety, standard transit vigilance"
+            },
+            {
+                name: "Paris",
+                category: "Heritage",
+                description: "The City of Light and Love, renowned worldwide for art, gastronomy, and iconic landmarks.",
+                attractions: ["Eiffel Tower", "Louvre Museum", "Notre-Dame Cathedral", "Seine River Cruise"],
+                weather: "Mild winters, warm summers (15°C - 26°C)",
+                safety: "Safe, caution advised for pickpockets in crowded spots"
+            },
+            {
+                name: "New York",
+                category: "Metros",
+                description: "The global metropolis that never sleeps, filled with skyscrapers, Broadway, and vibrant culture.",
+                attractions: ["Statue of Liberty", "Central Park", "Empire State Building", "Times Square"],
+                weather: "Four distinct seasons, 5°C - 29°C",
+                safety: "Moderately safe in major tourist zones"
+            },
+            {
+                name: "Pandharpur",
+                category: "Pilgrimage",
+                description: "A prominent pilgrimage destination in Maharashtra, famous for the historic Vithoba temple on Chandrabhaga river.",
+                attractions: ["Vithoba Temple", "Chandrabhaga River Ghats", "Kaiphal Fort", "ISKCON Pandharpur"],
+                weather: "Warm and sunny, moderate monsoons",
+                safety: "High security around religious sites"
+            },
+            {
+                name: "Kolhapur",
+                category: "Heritage",
+                description: "Famous for its rich royal heritage, Mahalaxmi Temple, authentic cuisine, and historic Panhala Fort.",
+                attractions: ["Mahalaxmi Temple", "Panhala Fort", "Rankala Lake", "New Palace Museum"],
+                weather: "Pleasant winters, tropical monsoons",
+                safety: "Very safe and welcoming for travelers"
+            },
+            {
+                name: "Delhi",
+                category: "Metros",
+                description: "India's historic capital city combining ancient Mughal monuments with modern metropolitan avenues.",
+                attractions: ["Red Fort", "Qutub Minar", "India Gate", "Lotus Temple"],
+                weather: "Hot summers, cool foggy winters",
+                safety: "Vigilance recommended in crowded markets"
+            },
+            {
+                name: "Bengaluru",
+                category: "Metros",
+                description: "The Silicon Valley of India, known for pleasant climate, lush botanical gardens, and tech innovation.",
+                attractions: ["Lalbagh Botanical Garden", "Bangalore Palace", "Cubbon Park", "Vidhana Soudha"],
+                weather: "Moderate and pleasant year-round (18°C - 28°C)",
+                safety: "High, generally very safe for tourists"
+            },
+            {
+                name: "Solapur",
+                category: "Heritage",
+                description: "Known for historic land forts, religious shrines, and its world-famous textile industry.",
+                attractions: ["Siddheshwar Temple", "Solapur Fort", "Great Indian Bustard Sanctuary"],
+                weather: "Warm and dry climate",
+                safety: "Safe with basic urban precautions"
+            },
+            {
+                name: "Kolkata",
+                category: "Heritage",
+                description: "The cultural capital of India, celebrated for colonial architecture, literature, and vibrant festivals.",
+                attractions: ["Victoria Memorial", "Howrah Bridge", "Dakshineswar Kali Temple", "Indian Museum"],
+                weather: "Tropical wet and dry climate",
+                safety: "Friendly city with good safety standards"
+            },
+            {
+                name: "Chennai",
+                category: "Metros",
+                description: "Major southern cultural hub offering historic Dravidian temples and the long Marina Beach.",
+                attractions: ["Marina Beach", "Kapaleeshwarar Temple", "Fort St. George", "San Thome Church"],
+                weather: "Warm coastal climate",
+                safety: "High safety rating across tourist districts"
             }
+        ];
+
+        let currentCategory = 'All';
+
+        function renderCities(list) {
+            const container = document.getElementById('cityGrid');
+            if (!list || list.length === 0) {
+                container.innerHTML = `<div class="no-results"><ion-icon name="search-outline" style="font-size: 2.5rem; margin-bottom: 10px;"></ion-icon><p>No matching cities found. Try another search query!</p></div>`;
+                return;
+            }
+
+            container.innerHTML = list.map(city => `
+                <div class="city-card">
+                    <div class="city-card-header">
+                        <h3>${city.name}</h3>
+                        <p>${city.description}</p>
+                    </div>
+                    <div class="city-card-body">
+                        <h4>Top Attractions</h4>
+                        <div class="attraction-tags">
+                            ${city.attractions.map(a => `<span class="attraction-tag">${a}</span>`).join('')}
+                        </div>
+
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                            <div class="card-stat">
+                                <ion-icon name="partly-sunny-outline"></ion-icon>
+                                <span><strong>Weather:</strong> ${city.weather}</span>
+                            </div>
+                            <div class="card-stat">
+                                <ion-icon name="shield-checkmark-outline"></ion-icon>
+                                <span><strong>Safety:</strong> ${city.safety}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="city-card-footer">
+                        <span style="font-size: 0.8rem; font-weight: 600; color: #007bff; text-transform: uppercase;">${city.category}</span>
+                        <a href="forecast.html?city=${encodeURIComponent(city.name)}" class="btn-card-action">Check Weather</a>
+                    </div>
+                </div>
+            `).join('');
         }
+
+        function filterCities() {
+            const query = document.getElementById('cityInput').value.toLowerCase().trim();
+            const filtered = citiesData.filter(city => {
+                const matchesCategory = currentCategory === 'All' || city.category === currentCategory;
+                const matchesQuery = city.name.toLowerCase().includes(query) || 
+                                     city.description.toLowerCase().includes(query) ||
+                                     city.attractions.some(a => a.toLowerCase().includes(query));
+                return matchesCategory && matchesQuery;
+            });
+            renderCities(filtered);
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            filterCities();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCities(citiesData);
+        });
     </script>
 </body>
 </html>

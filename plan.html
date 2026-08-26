@@ -3,131 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Journey Itinerary Planner</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <title>JourneyMate - Itinerary Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <style>
-        body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-}
-
-h1 {
-    color: #333333;
-    margin-bottom: 20px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-input[type="text"],
-input[type="date"] {
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-}
-button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-button:hover {
-    background-color: #45a049;
-}
-
-    </style>
-    <div class="container">
-        <h1>Journey Itinerary Planner</h1>
-        <form id="itineraryForm"   action="\plan"  method="POST">
-
-            <input type="text" id="startPlace" placeholder="Start Place" name="StartPlace" required>
-            <input type="text" id="destination" placeholder="Destination" name="EndPlace"required>
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" required>
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" required>
-            <button type="submit" onclick="Submit()">Create Itinerary</button>
-
-            
-        </form>
-        <div id="itineraryDisplay" class="itinerary-display">
-            <!-- Itinerary will be displayed here -->
-        </div>
-    </div>
-
-<script>
-    function submit(){
-        alert("Your Plan is Sucessfuly Inserted")
-    }
-</script>
-    <script >
-        document.getElementById('itineraryForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const startPlace = document.getElementById('startPlace').value;
-    const destination = document.getElementById('destination').value;
-    const startDate = new Date(document.getElementById('startDate').value);
-    const endDate = new Date(document.getElementById('endDate').value);
-
-    // Calculate the number of days for the journey
-    const timeDiff = endDate.getTime() - startDate.getTime();
-    const dayCount = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-    // Generate the itinerary
-    const itineraryDisplay = document.getElementById('itineraryDisplay');
-    itineraryDisplay.innerHTML = ''; // Clear previous itinerary
-
-    for (let i = 0; i <= dayCount; i++) {
-        const currentDay = new Date(startDate);
-        currentDay.setDate(startDate.getDate() + i);
-
-        const itineraryDay = document.createElement('div');
-        itineraryDay.classList.add('itinerary-day');
-
-        itineraryDay.innerHTML = `
-            <h2>Day ${i + 1} - ${currentDay.toDateString()}</h2>
-            <p><strong>Start Place:</strong> ${i === 0 ? startPlace : destination}</p>
-            <p><strong>Destination:</strong> ${destination}</p>
-        `;
-
-        // Customize this part to add more detailed plans for each day
-        if (i === 0) {
-            itineraryDay.innerHTML += '<p>Start your journey from ' + startPlace + ' and head towards ' + destination + '.</p>';
-        } else if (i === dayCount) {
-            itineraryDay.innerHTML += '<p>End your journey at ' + destination + '.</p>';
-        } 
-        else {
-            itineraryDay.innerHTML += '<p>Explore ' + destination + '.</p>';
+        .plan-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 50px 20px 35px;
+            text-align: center;
         }
 
-        itineraryDisplay.appendChild(itineraryDay);
-    }
-});
+        .plan-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, #00c6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .plan-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .plan-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-box label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #334155;
+        }
+
+        .input-box input, .input-box select {
+            padding: 12px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-box input:focus, .input-box select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+
+        .btn-create-plan {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-create-plan:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 198, 255, 0.4);
+        }
+
+        /* Itinerary Timeline */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .day-card {
+            background: #ffffff;
+            border-left: 5px solid #007bff;
+            border-radius: 14px;
+            padding: 22px 25px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+
+        .day-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .day-date {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #007bff;
+            background: #eff6ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .activity-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: #475569;
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 8px;
+        }
+
+        .activity-item ion-icon {
+            color: #10b981;
+            font-size: 1.1rem;
+        }
+
+        .add-activity-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .add-activity-row input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.88rem;
+        }
+
+        .add-activity-row button {
+            padding: 8px 14px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .print-btn {
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="header" data-header>
+        <div class="container">
+            <a href="index.html">
+                <h1 class="logo">JourneyMate</h1>
+            </a>
+
+            <nav class="navbar">
+                <ul class="navbar-list">
+                    <li><a href="index.html" class="navbar-link">Home</a></li>
+                    <li><a href="explore.html" class="navbar-link">Explore</a></li>
+                    <li><a href="forecast.html" class="navbar-link">Weather</a></li>
+                    <li><a href="plan.html" class="navbar-link active">Plan Trip</a></li>
+                    <li><a href="helpus.html" class="navbar-link">SafetyCheck</a></li>
+                    <li><a href="contactus.html" class="navbar-link">Contact Us</a></li>
+                </ul>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="Login.html" class="btn btn-secondary">Login</a>
+                    <a href="Signup.html" class="btn btn-secondary">Signup</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Plan Hero -->
+    <section class="plan-hero">
+        <h2 class="plan-title">Journey Itinerary Planner</h2>
+        <p style="color: #94a3b8;">Design your custom day-by-day travel schedule and explore seamless trip itineraries.</p>
+    </section>
+
+    <!-- Form & Content -->
+    <main class="plan-container">
+        <div class="plan-card">
+            <form id="itineraryForm" onsubmit="generateItinerary(event)">
+                <div class="form-grid">
+                    <div class="input-box">
+                        <label for="startPlace">Departure City</label>
+                        <input type="text" id="startPlace" placeholder="e.g. Mumbai" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="destination">Destination City</label>
+                        <input type="text" id="destination" placeholder="e.g. Goa, Lonavala, Paris" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-create-plan">
+                    <ion-icon name="map-outline"></ion-icon>
+                    <span>Generate Detailed Itinerary</span>
+                </button>
+            </form>
+        </div>
+
+        <div id="itineraryDisplay"></div>
+        <button id="printBtn" class="print-btn" onclick="window.print()">
+            🖨 Print & Save Itinerary
+        </button>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./images/footer-bg.png')">
+        <div class="container" style="text-align: center; padding: 30px 0; color: #94a3b8;">
+            <p>&copy; 2026 JourneyMate. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default dates (today to +3 days)
+            const today = new Date();
+            const future = new Date();
+            future.setDate(today.getDate() + 3);
+
+            document.getElementById('startDate').value = today.toISOString().split('T')[0];
+            document.getElementById('endDate').value = future.toISOString().split('T')[0];
+
+            // Load saved itinerary from local storage if exists
+            const saved = localStorage.getItem('jm_saved_itinerary');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    renderTimeline(data.startPlace, data.destination, new Date(data.startDate), new Date(data.endDate));
+                } catch(e){}
+            }
+        });
+
+        function generateItinerary(e) {
+            e.preventDefault();
+            const startPlace = document.getElementById('startPlace').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            const startDate = new Date(document.getElementById('startDate').value);
+            const endDate = new Date(document.getElementById('endDate').value);
+
+            if (endDate < startDate) {
+                window.showToast('End date cannot be earlier than start date.', 'warning');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('jm_saved_itinerary', JSON.stringify({ startPlace, destination, startDate, endDate }));
+
+            renderTimeline(startPlace, destination, startDate, endDate);
+            window.showToast('Itinerary created successfully!', 'success');
+        }
+
+        function renderTimeline(startPlace, destination, startDate, endDate) {
+            const timeDiff = endDate.getTime() - startDate.getTime();
+            const dayCount = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            const display = document.getElementById('itineraryDisplay');
+            const printBtn = document.getElementById('printBtn');
+
+            display.innerHTML = '';
+            printBtn.style.display = 'inline-block';
+
+            const defaultActivities = [
+                ["Departure & Arrival", "Hotel check-in & freshen up", "Evening city sightseeing & local dinner"],
+                ["Morning landmark tour", "Local market & shopping exploration", "Sunset viewpoint visit"],
+                ["Historical fort & museum tour", "Culinary food walk", "Relaxing evening stroll"],
+                ["Souvenir shopping", "Final sightseeing stop", "Return journey back home"]
+            ];
+
+            let timelineHtml = `<div class="timeline-container">`;
+
+            for (let i = 0; i <= dayCount; i++) {
+                const currentDay = new Date(startDate);
+                currentDay.setDate(startDate.getDate() + i);
+
+                const dateStr = currentDay.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                const dayNum = i + 1;
+                const acts = defaultActivities[i % defaultActivities.length];
+
+                timelineHtml += `
+                    <div class="day-card" id="day-card-${i}">
+                        <div class="day-header">
+                            <span class="day-title">Day ${dayNum}: ${i === 0 ? startPlace + ' ➔ ' + destination : destination}</span>
+                            <span class="day-date">${dateStr}</span>
+                        </div>
+
+                        <ul class="activity-list" id="activity-list-${i}">
+                            ${acts.map(act => `
+                                <li class="activity-item">
+                                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                                    <span>${act}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+
+                        <div class="add-activity-row">
+                            <input type="text" id="custom-act-input-${i}" placeholder="Add custom activity for Day ${dayNum}...">
+                            <button type="button" onclick="addCustomActivity(${i})">Add Activity</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            timelineHtml += `</div>`;
+            display.innerHTML = timelineHtml;
+        }
+
+        function addCustomActivity(dayIdx) {
+            const input = document.getElementById(`custom-act-input-${dayIdx}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const list = document.getElementById(`activity-list-${dayIdx}`);
+            const li = document.createElement('li');
+            li.className = 'activity-item';
+            li.innerHTML = `<ion-icon name="checkmark-circle-outline"></ion-icon><span>${text}</span>`;
+            list.appendChild(li);
+
+            input.value = '';
+            window.showToast('Activity added!', 'info');
+        }
     </script>
-
-
 </body>
 </html>

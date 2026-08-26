@@ -3,708 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global City Crime Data</title>
+    <title>JourneyMate - Global SafetyCheck & Crime Meter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f7;
+        .safety-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 50px 20px 35px;
             text-align: center;
-            margin: 0;
-            padding: 20px;
         }
+
+        .safety-title {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 0%, #00c6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .safety-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
         .card {
             background-color: white;
-            padding: 20px;
-            margin: 30px auto;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
         }
-        select, button {
+
+        .country-selector {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .country-btn {
+            padding: 10px 22px;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .country-btn.active {
+            background: linear-gradient(135deg, #007bff, #00c6ff);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .select-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
             margin-top: 15px;
-            padding: 12px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
         }
+
         select {
-            min-width: 200px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.95rem;
+            min-width: 220px;
+            outline: none;
         }
-        button {
-            background-color: #4CAF50;
+
+        select:focus {
+            border-color: #007bff;
+        }
+
+        .btn-check-safety {
+            padding: 12px 24px;
+            background: #10b981;
             color: white;
             border: none;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background 0.2s;
         }
-        button:hover {
-            background-color: #45a049;
+
+        .btn-check-safety:hover {
+            background: #059669;
         }
+
         #safetyLevel {
             margin-top: 25px;
             width: 100%;
             height: 24px;
-            background-color: #e0e0e0;
-            position: relative;
+            background-color: #e2e8f0;
             border-radius: 12px;
             overflow: hidden;
         }
+
         #safetyBar {
             height: 100%;
             width: 0;
             border-radius: 12px;
             transition: width 0.5s ease-in-out, background-color 0.5s ease-in-out;
         }
+
         .info-section {
             margin-top: 25px;
             text-align: left;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
             display: none;
         }
+
         .info-section h3 {
             margin-top: 0;
-            color: #333;
-            border-bottom: 1px solid #ddd;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 8px;
+            font-size: 1.1rem;
         }
+
         .info-section ul {
             padding-left: 20px;
+            margin-top: 12px;
         }
+
         .info-section li {
             margin-bottom: 8px;
+            color: #334155;
+            font-size: 0.95rem;
         }
+
         #cityInfo {
             font-style: italic;
-            color: #666;
+            color: #64748b;
             margin-top: 15px;
         }
-        .country-selector {
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .country-btn {
-            padding: 8px 15px;
-            background-color: #e0e0e0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .country-btn.active {
-            background-color: #4CAF50;
-            color: white;
-        }
+
         #safetySuggestions {
-            background-color: #e7f3ff;
+            background-color: #eff6ff;
+            border-color: #bfdbfe;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Global City Crime Data</h1>
-        
-        <div class="country-selector">
-            <button class="country-btn active" data-country="usa">USA</button>
-            <button class="country-btn" data-country="india">India</button>
+
+    <!-- Header Navigation -->
+    <header class="header" data-header>
+        <div class="container">
+            <a href="index.html">
+                <h1 class="logo">JourneyMate</h1>
+            </a>
+
+            <nav class="navbar">
+                <ul class="navbar-list">
+                    <li><a href="index.html" class="navbar-link">Home</a></li>
+                    <li><a href="explore.html" class="navbar-link">Explore</a></li>
+                    <li><a href="forecast.html" class="navbar-link">Weather</a></li>
+                    <li><a href="plan.html" class="navbar-link">Plan Trip</a></li>
+                    <li><a href="helpus.html" class="navbar-link active">SafetyCheck</a></li>
+                    <li><a href="contactus.html" class="navbar-link">Contact Us</a></li>
+                </ul>
+
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <a href="Login.html" class="btn btn-secondary">Login</a>
+                    <a href="Signup.html" class="btn btn-secondary">Signup</a>
+                </div>
+            </nav>
         </div>
-        
-        <label for="city-select">Choose a city:</label>
-        <select id="city-select">
-            <option value="">--Select a city--</option>
-        </select>
-        <button id="showDataBtn">Show Crime Data</button>
-        
-        <h2>Safety Meter</h2>
-        <div id="safetyLevel">
-            <div id="safetyBar"></div>
+    </header>
+
+    <!-- Safety Hero -->
+    <section class="safety-hero">
+        <h2 class="safety-title">Global City Safety & Crime Meter</h2>
+        <p style="color: #94a3b8;">Evaluate crime index, safety meters, and traveler advisory tips before visiting cities.</p>
+    </section>
+
+    <!-- Main Card -->
+    <main class="safety-container">
+        <div class="card">
+            <div class="country-selector">
+                <button class="country-btn active" data-country="usa">USA Cities</button>
+                <button class="country-btn" data-country="india">Indian Cities</button>
+            </div>
+
+            <div class="select-row">
+                <select id="city-select">
+                    <option value="">-- Select a city --</option>
+                </select>
+                <button id="showDataBtn" class="btn-check-safety">Check Safety Meter</button>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #0f172a;">Safety Meter</h3>
+            <div id="safetyLevel">
+                <div id="safetyBar"></div>
+            </div>
+            <p id="safetyIndexValue" style="font-weight: 700; color: #0f172a; margin-top: 10px;"></p>
+            <p id="safetyInfo" style="font-weight: 600; margin-top: 4px;"></p>
+            <p id="cityInfo"></p>
+
+            <div id="crimeDetails" class="info-section">
+                <h3>Crime Breakdown</h3>
+                <ul id="crimeList"></ul>
+            </div>
+
+            <div id="safetySuggestions" class="info-section">
+                <h3>Safety Suggestions</h3>
+                <ul id="suggestionsList"></ul>
+            </div>
         </div>
-        <p id="safetyIndexValue"></p>
-        <p id="safetyInfo"></p>
-        <p id="cityInfo"></p>
-        
-        <div id="crimeDetails" class="info-section">
-            <h3>Crime Breakdown</h3>
-            <ul id="crimeList"></ul>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" style="background-image: url('./images/footer-bg.png')">
+        <div class="container" style="text-align: center; padding: 30px 0; color: #94a3b8;">
+            <p>&copy; 2026 JourneyMate. All Rights Reserved.</p>
         </div>
-        
-        <div id="safetySuggestions" class="info-section">
-            <h3>Safety Suggestions</h3>
-            <ul id="suggestionsList"></ul>
-        </div>
-    </div>
-    
+    </footer>
+
+    <script src="auth.js"></script>
     <script>
-        // Static crime data for US cities
         const usaCrimeData = [
             {
-                city: "New York",
-                total_cases: 39800,
-                population: 8300000,
-                crimes: {
-                    "Theft": 15200,
-                    "Assault": 8500,
-                    "Robbery": 6300,
-                    "Homicide": 320,
-                    "Burglary": 9480
-                },
-                description: "New York City has seen a decrease in crime rates over the past decade, with particularly significant drops in violent crime.",
+                city: "New York", total_cases: 39800, population: 8300000,
+                crimes: { "Theft": 15200, "Assault": 8500, "Robbery": 6300, "Homicide": 320, "Burglary": 9480 },
+                description: "New York City has seen a decrease in crime rates over the past decade, with significant drops in violent crime.",
                 safety_suggestions: [
-                    "Remain vigilant in tourist-heavy areas like Times Square and Central Park where pickpocketing can occur",
-                    "Use the subway during daytime and early evening hours; consider rideshares late at night",
-                    "Keep valuables concealed and be aware of your surroundings in crowded areas",
-                    "Avoid walking alone in less populated areas at night, particularly in parts of the Bronx and Brooklyn"
+                    "Remain vigilant in tourist-heavy areas like Times Square and Central Park",
+                    "Use the subway during daytime and early evening hours; rideshares late at night",
+                    "Keep valuables concealed in crowded areas"
                 ]
             },
             {
-                city: "Chicago",
-                total_cases: 28400,
-                population: 2700000,
-                crimes: {
-                    "Theft": 10200,
-                    "Assault": 7600,
-                    "Robbery": 4800,
-                    "Homicide": 560,
-                    "Burglary": 5240
-                },
-                description: "Chicago continues to work on reducing crime, with focused efforts on gun violence prevention in certain neighborhoods.",
+                city: "Chicago", total_cases: 28400, population: 2700000,
+                crimes: { "Theft": 10200, "Assault": 7600, "Robbery": 4800, "Homicide": 560, "Burglary": 5240 },
+                description: "Chicago continues efforts on violent crime prevention in specific neighborhoods.",
                 safety_suggestions: [
-                    "Research neighborhoods before visiting; crime rates vary significantly throughout the city",
-                    "Avoid the South and West sides at night if unfamiliar with the area",
-                    "Use rideshare services or taxis rather than public transportation late at night",
-                    "Keep car doors locked while driving, especially when stopped at traffic lights",
-                    "Stay in well-lit, populated areas when walking after dark"
+                    "Research neighborhoods before visiting",
+                    "Use rideshare services late at night",
+                    "Stay in well-lit, populated areas after dark"
                 ]
             },
             {
-                city: "Los Angeles",
-                total_cases: 32600,
-                population: 3900000,
-                crimes: {
-                    "Theft": 13800,
-                    "Assault": 6900,
-                    "Robbery": 5100,
-                    "Homicide": 290,
-                    "Burglary": 6510
-                },
-                description: "Los Angeles has diverse crime patterns across its many neighborhoods, with property crimes being more common than violent crimes.",
+                city: "Los Angeles", total_cases: 32600, population: 3900000,
+                crimes: { "Theft": 13800, "Assault": 6900, "Robbery": 5100, "Homicide": 290, "Burglary": 6510 },
+                description: "Los Angeles property crimes are more common than violent crimes in tourist zones.",
                 safety_suggestions: [
-                    "Be cautious in tourist areas like Hollywood Boulevard where petty theft is common",
-                    "Avoid displaying expensive electronics or jewelry in public",
-                    "Use caution when visiting Skid Row and parts of South LA",
-                    "Keep car windows rolled up and doors locked while driving",
-                    "Park in well-lit, secure locations and never leave valuables visible in your vehicle"
-                ]
-            },
-            {
-                city: "Houston",
-                total_cases: 21500,
-                population: 2300000,
-                crimes: {
-                    "Theft": 8900,
-                    "Assault": 5200,
-                    "Robbery": 3400,
-                    "Homicide": 280,
-                    "Burglary": 3720
-                },
-                description: "Houston's crime rates have remained relatively stable, with property crimes accounting for the majority of reported incidents.",
-                safety_suggestions: [
-                    "Be cautious in areas like Third Ward, Sunnyside, and parts of Southwest Houston after dark",
-                    "Keep car doors locked and windows up, particularly at stoplights",
-                    "Don't leave valuables visible in parked cars",
-                    "Stay aware of your surroundings in shopping center parking lots",
-                    "Use well-lit, busy streets when walking at night"
-                ]
-            },
-            {
-                city: "Miami",
-                total_cases: 15800,
-                population: 450000,
-                crimes: {
-                    "Theft": 7200,
-                    "Assault": 3100,
-                    "Robbery": 2400,
-                    "Homicide": 110,
-                    "Burglary": 2990
-                },
-                description: "Miami's tourist areas generally have lower crime rates, with most incidents concentrated in specific neighborhoods.",
-                safety_suggestions: [
-                    "Be alert for pickpockets in crowded tourist areas and nightlife districts",
-                    "Avoid Overtown, Liberty City, and parts of Little Haiti at night",
-                    "Use hotel safes for passports and extra cash",
-                    "Be cautious when using ATMs; choose ones in well-lit, populated areas",
-                    "Avoid displaying expensive jewelry or electronics on the beach"
-                ]
-            },
-            {
-                city: "Seattle",
-                total_cases: 12400,
-                population: 750000,
-                crimes: {
-                    "Theft": 6300,
-                    "Assault": 2100,
-                    "Robbery": 1800,
-                    "Homicide": 45,
-                    "Burglary": 2155
-                },
-                description: "Seattle has seen fluctuating crime rates, with property crimes like auto theft and break-ins being more prevalent.",
-                safety_suggestions: [
-                    "Be cautious in areas like Pioneer Square and parts of Downtown after dark",
-                    "Keep all valuables out of sight in parked vehicles",
-                    "Use secure bike locks as bicycle theft is common",
-                    "Stay aware in public transit stations, particularly at night",
-                    "Report suspicious activity to help community safety efforts"
-                ]
-            },
-            {
-                city: "Atlanta",
-                total_cases: 14200,
-                population: 500000,
-                crimes: {
-                    "Theft": 5900,
-                    "Assault": 3200,
-                    "Robbery": 2300,
-                    "Homicide": 140,
-                    "Burglary": 2660
-                },
-                description: "Atlanta has focused on community policing efforts to address crime hotspots within the city.",
-                safety_suggestions: [
-                    "Exercise caution in areas south of I-20 after dark",
-                    "Avoid walking alone at night in downtown and midtown",
-                    "Use valet parking or parking garages rather than street parking when possible",
-                    "Keep valuables hidden and cars locked, as auto break-ins are common",
-                    "Stay in well-lit areas and main streets when walking at night"
-                ]
-            },
-            {
-                city: "Boston",
-                total_cases: 11600,
-                population: 675000,
-                crimes: {
-                    "Theft": 5300,
-                    "Assault": 2400,
-                    "Robbery": 1500,
-                    "Homicide": 55,
-                    "Burglary": 2345
-                },
-                description: "Boston has maintained relatively low violent crime rates compared to other major U.S. cities.",
-                safety_suggestions: [
-                    "Be cautious in Roxbury, Dorchester, and Mattapan neighborhoods, especially at night",
-                    "Watch for pickpockets in crowded tourist areas like Faneuil Hall and Quincy Market",
-                    "Use caution on the T (subway) late at night",
-                    "Keep valuables secure and out of sight",
-                    "Use well-lit main streets at night rather than shortcuts through parks or alleys"
+                    "Be cautious on Hollywood Boulevard regarding petty theft",
+                    "Never leave valuables visible in your parked vehicle"
                 ]
             }
         ];
 
-        // Static crime data for Indian cities
         const indiaCrimeData = [
             {
-                city: "Mumbai",
-                total_cases: 31200,
-                population: 12400000,
-                crimes: {
-                    "Theft": 13500,
-                    "Assault": 5800,
-                    "Robbery": 4200,
-                    "Homicide": 240,
-                    "Cyber Crime": 7460
-                },
-                description: "Mumbai is generally safer than many other Indian metropolises, with concentrated efforts to reduce street crime in tourist areas.",
+                city: "Mumbai", total_cases: 31200, population: 12400000,
+                crimes: { "Theft": 13500, "Assault": 5800, "Robbery": 4200, "Homicide": 240, "Cyber Crime": 7460 },
+                description: "Mumbai is generally safer than many metropolises, with strong police vigilance around tourist districts.",
                 safety_suggestions: [
-                    "Be cautious of pickpockets in crowded areas like railway stations and markets",
-                    "Women should avoid traveling alone at night in less populated areas",
-                    "Use prepaid taxis from the airport rather than accepting rides from strangers",
-                    "Be wary of scams targeting tourists near popular attractions",
-                    "Keep jewelry and expensive items concealed when using public transportation"
+                    "Be cautious of pickpockets in crowded railway stations",
+                    "Use prepaid taxis from airport or app-based cabs",
+                    "Keep valuables secure when using public transport"
                 ]
             },
             {
-                city: "Delhi",
-                total_cases: 42800,
-                population: 11000000,
-                crimes: {
-                    "Theft": 18200,
-                    "Assault": 8600,
-                    "Robbery": 6300,
-                    "Homicide": 480,
-                    "Cyber Crime": 9220
-                },
-                description: "Delhi has higher crime rates than many Indian cities, with women's safety being a particular concern in certain areas.",
+                city: "Delhi", total_cases: 42800, population: 11000000,
+                crimes: { "Theft": 18200, "Assault": 8600, "Robbery": 6300, "Homicide": 480, "Cyber Crime": 9220 },
+                description: "Delhi has higher crime reports in crowded transit hubs and market areas.",
                 safety_suggestions: [
-                    "Women should exercise extra caution, especially at night, and consider using women-only metro cars",
-                    "Avoid isolated areas after dark, particularly in East and North Delhi",
-                    "Use registered radio taxis rather than auto-rickshaws at night",
-                    "Be vigilant in crowded tourist spots and markets where pickpocketing is common",
-                    "Keep valuables locked in hotel safes and carry only what you need"
+                    "Women should exercise extra caution at night",
+                    "Use registered app-based cabs late at night",
+                    "Be vigilant in crowded tourist spots"
                 ]
             },
             {
-                city: "Bangalore",
-                total_cases: 28400,
-                population: 8400000,
-                crimes: {
-                    "Theft": 12100,
-                    "Assault": 4200,
-                    "Robbery": 3800,
-                    "Homicide": 190,
-                    "Cyber Crime": 8110
-                },
-                description: "Bangalore has seen an increase in cybercrime, though it maintains lower rates of violent crime than many other major Indian cities.",
+                city: "Bangalore", total_cases: 28400, population: 8400000,
+                crimes: { "Theft": 12100, "Assault": 4200, "Robbery": 3800, "Homicide": 190, "Cyber Crime": 8110 },
+                description: "Bangalore has low violent crime rates, with tech scams being more prevalent.",
                 safety_suggestions: [
-                    "Be cautious of cybercrime and tech scams, which are particularly prevalent in this tech hub",
-                    "Use authorized ATMs in well-lit areas and check for skimming devices",
-                    "Avoid poorly lit streets and remote areas at night",
-                    "Women should be cautious when using ride-sharing services at night",
-                    "Be vigilant in crowded areas like Majestic Bus Station and City Market"
+                    "Be cautious of online tech scams and unauthorized ATMs",
+                    "Avoid poorly lit streets at late hours"
                 ]
             },
             {
-                city: "Chennai",
-                total_cases: 24100,
-                population: 7100000,
-                crimes: {
-                    "Theft": 10400,
-                    "Assault": 3800,
-                    "Robbery": 3100,
-                    "Homicide": 150,
-                    "Cyber Crime": 6650
-                },
-                description: "Chennai is considered one of the safer metropolitan cities in India, with relatively lower rates of violent crime.",
+                city: "Pune", total_cases: 19800, population: 3100000,
+                crimes: { "Theft": 8600, "Assault": 2900, "Robbery": 2400, "Homicide": 110, "Cyber Crime": 5790 },
+                description: "Pune is considered very safe for students and tourists.",
                 safety_suggestions: [
-                    "Be cautious in crowded areas like T. Nagar and Georgetown markets",
-                    "Keep a close eye on belongings when using public transportation",
-                    "Avoid displaying expensive electronics or jewelry",
-                    "Use pre-paid taxi services when traveling from the airport",
-                    "Be wary of unexpected help offers from strangers at tourist spots"
+                    "Exercise basic urban precautions",
+                    "Keep belongings secure in crowded market areas"
                 ]
-            },
-            {
-                city: "Kolkata",
-                total_cases: 21800,
-                population: 4500000,
-                crimes: {
-                    "Theft": 9200,
-                    "Assault": 3200,
-                    "Robbery": 2800,
-                    "Homicide": 130,
-                    "Cyber Crime": 6470
-                },
-                description: "Kolkata generally has lower crime rates compared to other major Indian cities, though petty theft remains common in crowded areas.",
-                safety_suggestions: [
-                    "Be vigilant against pickpockets in crowded areas like New Market and Gariahat",
-                    "Avoid isolated areas near the railway stations after dark",
-                    "Use registered taxis or app-based services rather than unlicensed vehicles",
-                    "Keep valuables secure when visiting tourist spots like Park Street and Victoria Memorial",
-                    "Be cautious of scams targeting tourists, particularly near Howrah Bridge"
-                ]
-            },
-            {
-                city: "Hyderabad",
-                total_cases: 26700,
-                population: 6800000,
-                crimes: {
-                    "Theft": 11500,
-                    "Assault": 4300,
-                    "Robbery": 3600,
-                    "Homicide": 170,
-                    "Cyber Crime": 7130
-                },
-                description: "Hyderabad has worked to improve safety in recent years, though property crimes remain a concern in certain areas.",
-                safety_suggestions: [
-                    "Exercise caution in crowded markets like Laad Bazaar and Sultan Bazaar",
-                    "Be alert when using ATMs, especially at night",
-                    "Avoid wearing expensive jewelry in public markets",
-                    "Use authorized transportation and avoid sharing cabs with strangers",
-                    "Be wary of cybercrime and avoid using public computers for sensitive transactions"
-                ]
-            },
-            {
-                city: "Pune",
-                total_cases: 19800,
-                population: 3100000,
-                crimes: {
-                    "Theft": 8600,
-                    "Assault": 2900,
-                    "Robbery": 2400,
-                    "Homicide": 110,
-                    "Cyber Crime": 5790
-                },
-                description: "Pune is generally considered safer than many larger Indian cities, though it has seen an increase in cybercrime.",
-                safety_suggestions: [
-                    "Be cautious around ATMs and when conducting online financial transactions",
-                    "Avoid isolated areas in the outskirts of the city after dark",
-                    "Women should be extra vigilant when traveling alone at night",
-                    "Keep belongings secure in crowded areas like MG Road and Fergusson College Road",
-                    "Use reputable transportation services, especially when traveling at night"
-                ]
-            },
-            {
-                city: "Ahmedabad",
-                total_cases: 18600,
-                population: 5500000,
-                crimes: {
-                    "Theft": 8100,
-                    "Assault": 2700,
-                    "Robbery": 2300,
-                    "Homicide": 95,
-                    "Cyber Crime": 5405
-                },
-                description: "Ahmedabad has relatively lower crime rates compared to other major Indian cities, with improving safety infrastructure.",
-                safety_suggestions: [
-                    "Be cautious in crowded areas like Lal Darwaza and Relief Road markets",
-                    "Avoid poorly lit and less populated areas after dark",
-                    "Use authorized auto-rickshaws with meters or app-based services",
-                    "Keep valuables secure and avoid displaying expensive items",
-                    "Women should avoid traveling alone in unfamiliar areas late at night"
-                ]
-            },
-            
-  {
-    city: "Chandigarh",
-    total_cases: 11200,
-    population: 1200000,
-    crimes: {
-      "Theft": 4500,
-      "Assault": 1400,
-      "Robbery": 950,
-      "Homicide": 35,
-      "Cyber Crime": 4315
-    },
-    description: "Chandigarh has relatively low crime rates compared to other major cities, with well-planned infrastructure and good policing contributing to safety.",
-    safety_suggestions: [
-      "Be cautious in crowded markets like Sector 17 and Sector 22",
-      "Avoid isolated areas in peripheral sectors after dark",
-      "Use registered auto-rickshaws or app-based services",
-      "Keep valuables secure when visiting tourist spots",
-      "Women can generally travel safely, but exercise normal precautions at night"
-    ]
-  },
-  {
-    "city": "Bhopal",
-    "total_cases": 14300,
-    "population": 1900000,
-    "crimes": {
-      "Theft": 5800,
-      "Assault": 1900,
-      "Robbery": 1300,
-      "Homicide": 55,
-      "Cyber Crime": 5245
-    },
-    "description": "Bhopal has moderate crime rates with newer parts of the city generally safer than older areas.",
-    "safety_suggestions": [
-      "Exercise caution in crowded Old City markets",
-      "Avoid poorly lit areas around lakes after evening",
-      "Use authorized auto services rather than private unmarked vehicles",
-      "Be vigilant at bus stations and railway stations",
-      "Women should avoid traveling alone in less developed areas after dark"
-    ]
-  },
-  {
-    "city": "Kochi",
-    "total_cases": 12100,
-    "population": 2100000,
-    "crimes": {
-      "Theft": 4900,
-      "Assault": 1500,
-      "Robbery": 1100,
-      "Homicide": 40,
-      "Cyber Crime": 4560
-    },
-    "description": "Kochi is one of the safer major cities in India with relatively low violent crime rates and good tourist safety infrastructure.",
-    "safety_suggestions": [
-      "Maintain normal vigilance in tourist areas like Fort Kochi and Marine Drive",
-      "Use metered auto-rickshaws or app-based services",
-      "Be cautious of water-related activities during monsoon season",
-      "Keep valuables secure in crowded markets and ferry stations",
-      "Women travelers generally report feeling safe compared to other Indian cities"
-    ]
-  },
-  {
-    "city": "Guwahati",
-    "total_cases": 13400,
-    "population": 1000000,
-    "crimes": {
-      "Theft": 5400,
-      "Assault": 1800,
-      "Robbery": 1200,
-      "Homicide": 65,
-      "Cyber Crime": 4935
-    },
-    "description": "Guwahati has moderate crime rates with significant variations between central and peripheral areas.",
-    "safety_suggestions": [
-      "Exercise increased caution in areas like Fancy Bazar and Paltan Bazar after dark",
-      "Avoid traveling in secluded riverside areas at night",
-      "Use pre-paid taxi services from airport and railway station",
-      "Keep valuables concealed when using public transportation",
-      "Women should preferably travel with companions during evening hours"
-    ]
-  },
-  {
-    "city": "Nagpur",
-    "total_cases": 16700,
-    "population": 2500000,
-    "crimes": {
-      "Theft": 6700,
-      "Assault": 2200,
-      "Robbery": 1600,
-      "Homicide": 70,
-      "Cyber Crime": 6130
-    },
-    "description": "Nagpur has moderate crime rates with better safety in central areas compared to rapidly developing outskirts.",
-    "safety_suggestions": [
-      "Be vigilant in crowded areas like Sitabuldi and Sadar",
-      "Avoid less populated industrial zones after working hours",
-      "Use registered auto-rickshaws or app-based ride services",
-      "Keep valuables secure when visiting markets and railway station",
-      "Women should avoid traveling alone in unfamiliar areas after evening"
-    ]
-  },
-  {
-    "city": "Surat",
-    "total_cases": 17900,
-    "population": 4500000,
-    "crimes": {
-      "Theft": 7300,
-      "Assault": 2500,
-      "Robbery": 1900,
-      "Homicide": 85,
-      "Cyber Crime": 6115
-    },
-    "description": "Surat has relatively lower crime rates despite rapid industrialization, with good security in diamond and textile business districts.",
-    "safety_suggestions": [
-      "Exercise normal caution in busy textile markets",
-      "Avoid less developed outskirts after dark",
-      "Use authorized auto-rickshaws or app-based services",
-      "Be vigilant against pickpocketing in crowded commercial areas",
-      "Women should preferably avoid isolated industrial zones at night"
-    ]
-  },
-  {
-    "city": "Thiruvananthapuram",
-    "total_cases": 11800,
-    "population": 1700000,
-    "crimes": {
-      "Theft": 4700,
-      "Assault": 1600,
-      "Robbery": 900,
-      "Homicide": 35,
-      "Cyber Crime": 4565
-    },
-    "description": "Thiruvananthapuram has lower crime rates compared to other state capitals, with good police presence in most areas.",
-    "safety_suggestions": [
-      "Maintain normal vigilance in tourist spots like Kovalam and Shanghumugham Beach",
-      "Use metered auto-rickshaws or app-based services",
-      "Keep valuables secure when visiting beaches and temples",
-      "Be cautious of swimming advisories during monsoon season",
-      "Women travelers report feeling relatively safe even in evening hours"
-    ]
-  },
-  {
-    "city": "Varanasi",
-    "total_cases": 15600,
-    "population": 1400000,
-    "crimes": {
-      "Theft": 6300,
-      "Assault": 2100,
-      "Robbery": 1500,
-      "Homicide": 75,
-      "Cyber Crime": 5625
-    },
-    "description": "Varanasi has moderate crime rates with tourist-related scams being more common than violent crimes in most areas.",
-    "safety_suggestions": [
-      "Be vigilant against scams targeting tourists near ghats and temples",
-      "Avoid narrow alleys in the old city after dark",
-      "Use pre-paid auto or taxi services, especially for nighttime travel",
-      "Keep valuables secure when visiting crowded religious sites",
-      "Women should dress conservatively and preferably travel with companions"
-    ]
-  },
-  {
-    "city": "Patna",
-    "total_cases": 18900,
-    "population": 2000000,
-    "crimes": {
-      "Theft": 7800,
-      "Assault": 2700,
-      "Robbery": 2000,
-      "Homicide": 120,
-      "Cyber Crime": 6280
-    },
-    "description": "Patna has higher crime rates compared to cities of similar size, with significant safety variations between different areas.",
-    "safety_suggestions": [
-      "Exercise increased caution in crowded markets like Patna Market and Gandhi Maidan area",
-      "Avoid poorly lit streets and isolated areas after sunset",
-      "Use pre-paid auto-rickshaws or app-based services",
-      "Be particularly vigilant at railway station and bus terminals",
-      "Women should avoid traveling alone at night in most areas"
-    ]
-  },
-  {
-    "city": "Coimbatore",
-    "total_cases": 13700,
-    "population": 1800000,
-    "crimes": {
-      "Theft": 5600,
-      "Assault": 1700,
-      "Robbery": 1200,
-      "Homicide": 45,
-      "Cyber Crime": 5155
-    },
-    "description": "Coimbatore has lower crime rates compared to other major Tamil Nadu cities, with industrial areas having good security infrastructure.",
-    "safety_suggestions": [
-      "Maintain normal vigilance in commercial areas like Oppanakara Street and RS Puram",
-      "Use authorized auto-rickshaws with meters or app-based services",
-      "Keep valuables secure when visiting temples and tourist attractions",
-      "Be cautious in peripheral areas connecting to highways after dark",
-      "Women generally report feeling safer than in many other cities"
-    ]
-  },
-  {
-    "city": "Visakhapatnam",
-    "total_cases": 14500,
-    "population": 2000000,
-    "crimes": {
-      "Theft": 5900,
-      "Assault": 1800,
-      "Robbery": 1300,
-      "Homicide": 60,
-      "Cyber Crime": 5440
-    },
-    "description": "Visakhapatnam has moderate crime rates with coastal tourist areas having better police presence than interior neighborhoods.",
-    "safety_suggestions": [
-      "Exercise normal caution at beaches and tourist spots",
-      "Avoid isolated beach stretches after sunset",
-      "Use authorized auto-rickshaws or app-based services",
-      "Be vigilant against petty theft in crowded marketplaces",
-      "Women should exercise additional caution in less populated areas after dark"
-    ]
-  },
-  {
-    "city": "Bhubaneswar",
-    "total_cases": 12800,
-    "population": 1100000,
-    "crimes": {
-      "Theft": 5200,
-      "Assault": 1600,
-      "Robbery": 1100,
-      "Homicide": 50,
-      "Cyber Crime": 4850
-    },
-    "description": "Bhubaneswar has relatively moderate crime rates with planned areas being safer than rapidly developing outskirts.",
-    "safety_suggestions": [
-      "Be vigilant in crowded markets like Unit-1 and Saheed Nagar",
-      "Avoid less developed areas on the periphery after evening",
-      "Use registered auto-rickshaws or app-based ride services",
-      "Keep valuables secure when visiting temples and monuments",
-      "Women should preferably avoid traveling alone in isolated areas at night"
-    ]
-  }
-]
-        ;
+            }
+        ];
 
         let currentCountry = "usa";
         let currentData = usaCrimeData;
@@ -713,12 +317,10 @@
             currentCountry = country;
             currentData = country === "usa" ? usaCrimeData : indiaCrimeData;
             
-            // Update country selector buttons
             document.querySelectorAll('.country-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.country === country);
             });
             
-            // Clear current selection and info
             document.getElementById("city-select").value = "";
             document.getElementById("safetyBar").style.width = "0";
             document.getElementById("safetyIndexValue").textContent = "";
@@ -727,13 +329,12 @@
             document.getElementById("crimeDetails").style.display = "none";
             document.getElementById("safetySuggestions").style.display = "none";
             
-            // Repopulate cities
             populateCities();
         }
 
         function populateCities() {
             const citySelect = document.getElementById("city-select");
-            citySelect.innerHTML = '<option value="">--Select a city--</option>';
+            citySelect.innerHTML = '<option value="">-- Select a city --</option>';
             
             currentData.forEach(data => {
                 const option = document.createElement("option");
@@ -746,45 +347,35 @@
         function displayCrimeData() {
             const selectedCity = document.getElementById("city-select").value;
             if (!selectedCity) {
-                alert("Please select a city.");
+                window.showToast("Please select a city first.", "warning");
                 return;
             }
             
             const cityData = currentData.find(data => data.city === selectedCity);
-            if (!cityData) {
-                alert("No data available for this city.");
-                return;
-            }
+            if (!cityData) return;
             
-            // Calculate safety index (cases per 100,000 residents)
             const safetyIndex = (cityData.total_cases / cityData.population) * 100000;
             document.getElementById("safetyIndexValue").textContent = `Safety Index: ${safetyIndex.toFixed(1)} cases per 100,000 residents`;
             
-            // Set safety bar
             const safetyBar = document.getElementById("safetyBar");
-            const normalizedIndex = Math.min(safetyIndex / 2000, 1) * 100; // Normalize to percentage (capped at 100%)
+            const normalizedIndex = Math.min(safetyIndex / 2000, 1) * 100;
             safetyBar.style.width = `${normalizedIndex}%`;
             
-            // Set color based on safety index
             let color, safetyText;
             if (safetyIndex < 800) {
-                color = "#4CAF50"; // Green - Safe
-                safetyText = "Relatively Safe";
+                color = "#10b981"; safetyText = "Relatively Safe";
             } else if (safetyIndex < 1200) {
-                color = "#FFC107"; // Yellow - Moderate
-                safetyText = "Moderate Risk";
+                color = "#f59e0b"; safetyText = "Moderate Risk";
             } else {
-                color = "#F44336"; // Red - High Risk
-                safetyText = "Higher Risk";
+                color = "#ef4444"; safetyText = "Higher Risk";
             }
             safetyBar.style.backgroundColor = color;
-            document.getElementById("safetyInfo").textContent = `Safety Assessment: ${safetyText}`;
+            document.getElementById("safetyInfo").textContent = `Assessment: ${safetyText}`;
+            document.getElementById("safetyInfo").style.color = color;
             document.getElementById("cityInfo").textContent = cityData.description;
             
-            // Display crime breakdown
             const crimeList = document.getElementById("crimeList");
             crimeList.innerHTML = "";
-            
             for (const [crimeType, count] of Object.entries(cityData.crimes)) {
                 const percentage = ((count / cityData.total_cases) * 100).toFixed(1);
                 const li = document.createElement("li");
@@ -792,32 +383,25 @@
                 crimeList.appendChild(li);
             }
             
-            // Display safety suggestions
             const suggestionsList = document.getElementById("suggestionsList");
             suggestionsList.innerHTML = "";
-            
             cityData.safety_suggestions.forEach(suggestion => {
                 const li = document.createElement("li");
                 li.textContent = suggestion;
                 suggestionsList.appendChild(li);
             });
             
-            // Show info sections
             document.getElementById("crimeDetails").style.display = "block";
             document.getElementById("safetySuggestions").style.display = "block";
         }
 
-        // Set up event listeners
         document.getElementById("showDataBtn").addEventListener("click", displayCrimeData);
         
         document.querySelectorAll('.country-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                switchCountry(btn.dataset.country);
-            });
+            btn.addEventListener('click', () => switchCountry(btn.dataset.country));
         });
         
-        // Initialize the page
-        window.onload = populateCities;
+        document.addEventListener('DOMContentLoaded', populateCities);
     </script>
 </body>
 </html>

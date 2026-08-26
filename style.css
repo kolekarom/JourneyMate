@@ -1013,3 +1013,16 @@ body {
   .about .container { grid-template-columns: 0.7fr 1fr; }
 
 }
+
+/* Active Navbar Link & Auth Helper Utility Styles */
+.navbar-link.active {
+  color: var(--viridian-green, #007bff);
+  font-weight: var(--fw-600, 600);
+}
+
+.auth-nav-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
