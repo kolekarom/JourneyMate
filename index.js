@@ -109,6 +109,7 @@ app.get('/explore', (req, res) => res.sendFile(path.join(__dirname, 'explore.htm
 app.get('/forecast', (req, res) => res.sendFile(path.join(__dirname, 'forecast.html')));
 app.get('/helpus', (req, res) => res.sendFile(path.join(__dirname, 'helpus.html')));
 app.get('/contactus', (req, res) => res.sendFile(path.join(__dirname, 'contactus.html')));
+app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'profile.html')));
 
 const PORT = process.env.PORT || 2090;
 app.listen(PORT, () => {

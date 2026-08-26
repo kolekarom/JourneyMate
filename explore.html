@@ -376,10 +376,19 @@
                 return;
             }
 
-            container.innerHTML = list.map(city => `
+            const favs = window.getFavoriteCities ? window.getFavoriteCities() : [];
+
+            container.innerHTML = list.map(city => {
+                const isFav = favs.includes(city.name);
+                return `
                 <div class="city-card">
                     <div class="city-card-header">
-                        <h3>${city.name}</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3>${city.name}</h3>
+                            <button onclick="toggleFav('${city.name}', this)" style="background: none; border: none; color: ${isFav ? '#ef4444' : '#ffffff'}; font-size: 1.4rem; cursor: pointer;">
+                                <ion-icon name="${isFav ? 'heart' : 'heart-outline'}"></ion-icon>
+                            </button>
+                        </div>
                         <p>${city.description}</p>
                     </div>
                     <div class="city-card-body">
@@ -404,7 +413,20 @@
                         <a href="forecast.html?city=${encodeURIComponent(city.name)}" class="btn-card-action">Check Weather</a>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
+        }
+
+        function toggleFav(cityName, btn) {
+            const added = window.toggleFavoriteCity(cityName);
+            const icon = btn.querySelector('ion-icon');
+            if (added) {
+                btn.style.color = '#ef4444';
+                icon.setAttribute('name', 'heart');
+            } else {
+                btn.style.color = '#ffffff';
+                icon.setAttribute('name', 'heart-outline');
+            }
         }
 
         function filterCities() {
